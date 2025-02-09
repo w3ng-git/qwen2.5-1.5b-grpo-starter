@@ -1,15 +1,24 @@
+"""
+Dataset Processing Script
+
+This script processes the TLDR dataset to ensure it's presented in a conversational format.
+We adapt the data to use chat templates because dialogue models have shown more stable performance,
+and we need to conform to the chat template structure expected by these models.
+"""
+
 import argparse
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
 def process_dataset(tokenizer):
-    # 加载数据集
+    # Load dataset
     dataset = load_dataset("tldr_dataset_ori")
     train_data = dataset["train"]
 
-    # 打乱后选择前一半数据
+    # Shuffle and select first half of the data
     half_train_data = train_data.shuffle(seed=42).select(range(len(train_data) // 2))
-    # 对每个样本应用对话模板，包括system message
+    
+    # Apply chat template to each sample, including system message
     def apply_chat_template(example):
         messages = [
             {"role": "system", "content": "You are a helpful assistant to summarizes text."},
@@ -20,20 +29,21 @@ def process_dataset(tokenizer):
 
     processed_data = half_train_data.map(apply_chat_template)
     print(processed_data[0]['prompt'])
-    # 保存处理后的数据集到磁盘
+    
+    # Save processed dataset to disk
     processed_data.save_to_disk("tldr_dataset_processed")
-    print("处理后的训练数据已保存到 'tldr_dataset_processed' 文件夹中")
+    print("Processed training data has been saved to 'tldr_dataset_processed' directory")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="处理TLDR数据集并应用对话模板")
-    parser.add_argument("--tokenizer", type=str, required=True, help="Hugging Face的模型tokenizer名称或路径")
+    parser = argparse.ArgumentParser(description="Process TLDR dataset and apply chat template")
+    parser.add_argument("--tokenizer", type=str, required=True, help="Hugging Face model tokenizer name or path")
     args = parser.parse_args()
 
     try:
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer)
     except Exception as e:
-        print(f"加载tokenizer时出错: {e}")
-        print("请确保提供了有效的Hugging Face模型tokenizer名称或路径")
+        print(f"Error loading tokenizer: {e}")
+        print("Please ensure you provided a valid Hugging Face model tokenizer name or path")
         exit(1)
 
     process_dataset(tokenizer)
