@@ -3,7 +3,8 @@ import torch
 import readline
 import os
 tok = AutoTokenizer.from_pretrained("qwen2.5-1.5b")
-model = AutoModelForCausalLM.from_pretrained("trainOutput", device_map='auto')
+# replace with your model
+model = AutoModelForCausalLM.from_pretrained("trainOutput", device_map='auto') # 
 model.eval()
 model.half()
 inputs = ''
