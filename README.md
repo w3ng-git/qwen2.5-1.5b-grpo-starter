@@ -17,6 +17,48 @@ For custom hardware setups(2xGPU configuration), modify the following configurat
 - `zero3.yaml`: DeepSpeed configuration
 - `launch_train.sh` or `launch_train.ipynb`: Training launch scripts (choose based on preference)
 
+## Reward Functions
+
+### Simple Length-based Reward
+
+The basic reward function used in this example aims for a target length of 200 characters, with maximum reward (0) at the target:
+
+```python
+def reward_len(completions, **kwargs):
+    return [-abs(200 - len(completion)) for completion in completions]
+```
+
+### Alternative Smooth Reward (Optional)
+
+A more sophisticated version with smooth transitions and tolerance range is also available, though not necessary for this simple experiment:
+
+```python
+def reward_len(completions, **kwargs):
+    """
+    Reward function: Aligns text length with a tolerance range for maximum reward
+    
+    Features:
+    1. Zero penalty within target length ±tolerance range
+    2. Uses square root function to smooth penalty growth outside the range
+    3. Scale factor controls penalty intensity
+    """
+    target_len = 300  # Target character length
+    tolerance = 30    # Allowed error range
+    scale = 0.05     # Reward scaling factor
+    
+    rewards = []
+    for completion in completions:
+        # Calculate difference from target length
+        diff = abs(target_len - len(completion)) - tolerance
+        # Zero within tolerance range, calculate penalty if exceeded
+        reward = -scale * (max(diff, 0) ** 0.5)
+        rewards.append(reward)
+    
+    return rewards
+```
+
+Note: For this experimental setup, the simple reward function proved sufficient, and the smooth version is not necessary.
+
 ## Training Pipeline
 
 ### 1. Dataset Preparation
