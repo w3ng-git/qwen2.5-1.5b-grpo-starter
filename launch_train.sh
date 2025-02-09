@@ -1,0 +1,1 @@
+ACCELERATE_LOG_LEVEL=info accelerate launch --config_file zero3.yaml --num_processes=7 train_grpo.py
