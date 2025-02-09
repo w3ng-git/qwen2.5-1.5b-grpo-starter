@@ -15,6 +15,7 @@ Mode                 LastWriteTime         Length Name
 ```
 To verify the processed dataset, you can load and inspect it using the Hugging Face Datasets library:
 
-python
+```python
 from datasets import load_from_disk
 dataset = load_from_disk("tldr_dataset_processed")
+```
