@@ -1,6 +1,6 @@
 # GRPO Training Example
 
-This repository provides a simple example of using GRPO(Group Relative Policy Optimization) Trainer, GRPO is a variant of Proximal Policy Optimization (PPO). GRPO is designed to enhance model capabilities while optimizing memory usage during training.
+This repository provides a simple example of using GRPO(Group Relative Policy Optimization) Trainer, GRPO is a variant of Proximal Policy Optimization (PPO). GRPO is designed to enhance model capabilities in specific domains.
 
 ## System Requirements
 
