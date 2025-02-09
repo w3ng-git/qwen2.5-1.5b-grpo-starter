@@ -49,7 +49,7 @@ To compare model performance at different training stages:
 
 Note: As this is a simple RL experiment, formal evaluation metrics are not implemented.
 
-## Training Results
+## Training Results(~100 step, total 300)
 
 Using a simple length-based reward function (maximum reward of 0 at 200 tokens), the training demonstrates effective control of model output:
 
