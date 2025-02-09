@@ -66,7 +66,7 @@ Note: For this experimental setup, the simple reward function proved sufficient,
 huggingface-cli download trl-lib/tldr --local-dir tldr_dataset_ori --repo-type dataset
 ```
 Qwen 2.5 1.5b model @ https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/tree/main
-or downlod it using cli
+or download it using cli
 ```sh
 huggingface-cli download Qwen/Qwen2.5-1.5B-Instruct --local-dir qwen2.5-1.5b-instruct
 ```
