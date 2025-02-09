@@ -48,12 +48,4 @@ To compare model performance at different training stages:
 
 Note: As this is a simple RL experiment, formal evaluation metrics are not implemented.
 
-## Directory Structure
-```
-.
-├── zero3.yaml              # DeepSpeed configuration
-├── launch_train.sh        # Shell training script
-├── launch_train.ipynb     # Notebook training script
-├── process_dataset.py     # Data processing script
-├── demo_in_chat.py        # Interactive demo script
-└── trainOutput/           # Training outputs and checkpoints
+
