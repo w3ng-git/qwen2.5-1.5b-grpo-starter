@@ -1,75 +1,74 @@
-# train_grpo.py
 from datasets import load_from_disk
 from trl import GRPOConfig, GRPOTrainer
 
 dataset = load_from_disk("tldr_dataset_processed")
 
-# 奖励函数 对齐20个字符
+# Simple Reward function to align text to target length. ["] https://huggingface.co/docs/trl/main/en/grpo_trainer
 def reward_len(completions, **kwargs):
     return [-abs(200 - len(completion)) for completion in completions]
 
-# 平滑更优的奖励函数
+# Improved smooth reward function, unnecessary！
 # def reward_len(completions, **kwargs):
 #     """
-#     奖励函数：对齐字符长度，允许一定范围内获得最大奖励
+#     Reward function: Aligns text length with a tolerance range for maximum reward
     
-#     特点：
-#     1. 在目标长度±tolerance范围内，奖励为0
-#     2. 超出范围时，使用平方根函数缓和惩罚增长
-#     3. scale因子控制惩罚强度
+#     Features:
+#     1. Zero penalty within target length ±tolerance range
+#     2. Uses square root function to smooth penalty growth outside the range
+#     3. Scale factor controls penalty intensity
 #     """
-#     target_len = 300  # 目标字符长度
-#     tolerance = 30    # 允许的误差范围
-#     scale = 0.05     # 奖励缩放因子
+#     target_len = 300  # Target character length
+#     tolerance = 30    # Allowed error range
+#     scale = 0.05     # Reward scaling factor
     
 #     rewards = []
 #     for completion in completions:
-#         # 计算与目标长度的差距
+#         # Calculate difference from target length
 #         diff = abs(target_len - len(completion)) - tolerance
-#         # 在容忍范围内为0，超出范围则计算惩罚
+#         # Zero within tolerance range, calculate penalty if exceeded
 #         reward = -scale * (max(diff, 0) ** 0.5)
 #         rewards.append(reward)
     
 #     return rewards
 
 training_args = GRPOConfig(
-    # beta = 0.4, 
+    # beta = 0.04, change if you need to
     
-    # 添加 bf16 配置
-    bf16=True,  # 启用 bf16 训练
+    # BF16 configuration
+    bf16=True,  # Enable bf16 training
 
     learning_rate = 1e-06,
     
-    # 输出和日志设置
-    output_dir="trainOutput",  # 输出目录
+    # Output and logging settings
+    output_dir="trainOutput",  # Output directory
     logging_dir="logOutput",
-    logging_steps=10,          # 每10步记录一次日志
+    logging_steps=10,          # Log every 10 steps
     
-    # 批处理和生成设置
-    per_device_train_batch_size=8,  # 批大小
-    num_generations=4,  # 每个prompt的生成数量
+    # Batch and generation settings
+    per_device_train_batch_size=8,  # Batch size
+    num_generations=4,  # Number of generations per prompt
     
-    # 显存优化设置
-    gradient_checkpointing=True,  # 启用梯度检查点
-    use_vllm=True,  # 使用vLLM优化
+    # Memory optimization settings
+    gradient_checkpointing=True,  # Enable gradient checkpointing
+    use_vllm=True,  # Use vLLM optimization
     vllm_device='auto',
-    vllm_gpu_memory_utilization=0.7,  # 控制GPU显存使用率
+    vllm_gpu_memory_utilization=0.7,  # Control GPU memory usage
     
-    # 序列长度设置
-    max_prompt_length=1024,  # 限制输入长度
-    max_completion_length=640,  # 限制生成长度, ATTENTION: THIS SHOULD BE MODIFIED IF THE MODEL SHOULD GENERATE MORE THAN THAT
+    # Sequence length settings
+    max_prompt_length=1024,  # Limit input length
+    max_completion_length=640,  # Limit generation length, ATTENTION: THIS SHOULD BE MODIFIED IF THE MODEL SHOULD GENERATE MORE THAN THAT
     
-    # 学习率设置
-    lr_scheduler_type='cosine',  # 余弦学习率调度
-    warmup_ratio=0.2,  # 预热比例
+    # Learning rate settings
+    lr_scheduler_type='cosine',  # Cosine learning rate schedule
+    warmup_ratio=0.2,  # Warmup ratio
     
-    # 训练轮数
+    # Training epochs
     num_train_epochs=1,
     
-    # 检查点保存设置
-    save_strategy="steps",  # 按步数保存
-    save_steps=30,        # 每100步保存一次
-    save_total_limit=8,    # 最多保存8个检查点 ATTENTION: YOU NEED TO MAKE SURE MODEL 'output_dir' empty!
+    # Checkpoint saving settings
+    save_strategy="steps",  # Save by steps
+    save_steps=30,        # Save every 30 steps
+    save_total_limit=8,    # Keep maximum 8 checkpoints ATTENTION: YOU NEED TO MAKE SURE MODEL 'output_dir' empty!
 
     report_to = ["tensorboard"],
 )
@@ -84,5 +83,5 @@ trainer = GRPOTrainer(
 
 trainer.train()
 
-# 在训练结束后保存最终模型
+# Save the final model after training
 trainer.model.save_pretrained(training_args.output_dir + "/final_checkpoint") # grpo seems won't save the model by default, so, manually save it
