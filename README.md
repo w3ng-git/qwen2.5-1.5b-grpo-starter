@@ -68,7 +68,7 @@ huggingface-cli download trl-lib/tldr --local-dir tldr_dataset_ori --repo-type d
 Qwen 2.5 1.5b model @ https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/tree/main
 or downlod it using cli
 ```sh
-huggingface-cli download Qwen/Qwen2.5-1.5B-Instruct --local-dir qwen2.5-1.5b
+huggingface-cli download Qwen/Qwen2.5-1.5B-Instruct --local-dir qwen2.5-1.5b-instruct
 
 ### 2. Data Processing
 Execute the processing script to adapt data for dialogue model training:
