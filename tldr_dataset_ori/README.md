@@ -1,5 +1,5 @@
 # Raw, Original Dataset
-To download the required dataset, execute the following command from the project *root directory*:
+To download the required dataset, execute the following command from the project **root directory**:
 ```sh
 huggingface-cli download trl-lib/tldr --local-dir tldr_dataset_ori --repo-type dataset
 ```
