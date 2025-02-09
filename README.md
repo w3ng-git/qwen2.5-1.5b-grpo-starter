@@ -46,7 +46,7 @@ def reward_len(completions, **kwargs):
     """
     target_len = 300  # Target character length
     tolerance = 30    # Allowed error range
-    scale = 0.05     # Reward scaling factor
+    scale = 1.0     # Reward scaling factor
     
     rewards = []
     for completion in completions:
