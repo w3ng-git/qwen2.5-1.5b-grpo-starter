@@ -1,11 +1,11 @@
 # Data Processing
-To process the dataset, execute the following command:
+To process the dataset, execute the following command **(from the parent directory)**:
  
 ```sh
 python process_dataset.py
 ```
 
-After successful processing, the directory will contain these files:
+After successful processing, come back here, and the directory will contain these files:
 ```cmd
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
