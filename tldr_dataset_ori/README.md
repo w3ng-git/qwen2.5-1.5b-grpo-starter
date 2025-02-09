@@ -5,7 +5,7 @@ huggingface-cli download trl-lib/tldr --local-dir tldr_dataset_ori --repo-type d
 ```
 
 ```
-Upon completion, this directory structure should appear as follows:
+Upon completion, this directory structure may appear as follows:
 
 (.)
  ├─.cache
