@@ -16,6 +16,8 @@ This repository provides a simple example of using GRPO(Group Relative Policy Op
 For custom hardware setups(2xGPU configuration), modify the following configuration files:
 - `zero3.yaml`: DeepSpeed configuration
 - `launch_train.sh` or `launch_train.ipynb`: Training launch scripts (choose based on preference)
+- modify the num_processes in `launch_train` to set to use more or less NUM GPU
+- OOM: if you encountered with OOM of cuda, try smaller `Batch size >=1` and `Group size > 2`
 
 ## Reward Functions
 
